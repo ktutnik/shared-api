@@ -1,7 +1,7 @@
 import { authorize, bind, preSave } from "@plumier/core"
 import { val } from "@plumier/validator"
 import { genericController, JwtClaims } from "plumier"
-import { Column, getRepository, OneToMany } from "typeorm"
+import { Column, Entity, getRepository, OneToMany } from "typeorm"
 import keyGen from "uuid-apikey"
 
 import { EntityBase } from "../../_shared/entity-base"
@@ -14,6 +14,7 @@ export type ApplicationType = "Basic" | "Premium"
     c.getOne().authorize("AppOwner", "AppUser")
     c.methods("Put", "Patch", "Delete").authorize("AppOwner")
 })
+@Entity()
 export class Application extends EntityBase {
 
     @authorize.write("Admin")
