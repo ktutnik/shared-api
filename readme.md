@@ -23,3 +23,11 @@ Furthermore, the `ctx.state.subscription` value used to secure each shared API r
 Since the API grouped into two, each group has their own swagger:
 * Backend `localhost:8000/swagger/backend` 
 * Shared API `localhost:8000/swagger/api` 
+
+## Running the example
+* Clone 
+* `yarn install` 
+* Create `.env` file based on `.env-example` file
+* `yarn debug` to start debugging
+* `localhost:8000/swagger/backend` to see the backend swagger
+* `localhost:8000/swagger/api` to see the shared api swagger
