@@ -1,11 +1,11 @@
 import { ActionResult, CustomMiddleware, DefaultFacility, HttpStatusError, Invocation, PlumierApplication } from "plumier"
 import { getRepository } from "typeorm"
 
-import { ApplicationType } from "../backend/application/application-entity"
+import { Application } from "../backend/application/application-entity"
 
 declare module "koa" {
     interface DefaultState {
-        subscription?: ApplicationType
+        application?: Application
     }
 }
 
@@ -16,8 +16,6 @@ declare module "koa" {
  */
 class ApiKeyMiddleware implements CustomMiddleware {
     async execute(invocation: Invocation): Promise<ActionResult> {
-        // lazy import the Entity, due to JavaScript issue on entities with cross reference
-        const { Application } = await import("../backend/application/application-entity")
         const key = invocation.ctx.request.header["x-api-key"]
         // if no api key provided just continue the request
         if (!key) return invocation.proceed()
@@ -26,7 +24,7 @@ class ApiKeyMiddleware implements CustomMiddleware {
         const repo = getRepository(Application)
         const app = await repo.findOne({ apiKey: key })
         // attach the application subscription type in ctx.subscription property
-        invocation.ctx.state.subscription = app?.type
+        invocation.ctx.state.application = app
         return invocation.proceed()
     }
 }

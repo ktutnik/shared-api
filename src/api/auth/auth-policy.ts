@@ -2,5 +2,5 @@ import { authPolicy } from "@plumier/core";
 
 
 authPolicy()
-    .register("Basic", ({ ctx }) => ctx.state?.subscription === "Basic" )
-    .register("Premium", ({ ctx }) => ctx.state?.subscription === "Premium" )
+    .register("Basic", ({ ctx }) => ctx.state?.application?.type === "Basic" )
+    .register("Premium", ({ ctx }) => ctx.state?.application?.type === "Premium" )

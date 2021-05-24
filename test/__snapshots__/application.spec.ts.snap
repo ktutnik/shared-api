@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Application Should able to activate basic application 1`] = `
+Object {
+  "active": true,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Lorem Ipsum",
+  "type": "Basic",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`Application Should able to activate premium application 1`] = `
+Object {
+  "active": true,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Lorem Ipsum",
+  "type": "Premium",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`Application Should create application properly, should not active by default 1`] = `
+Object {
+  "active": false,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Lorem Ipsum",
+  "type": "Basic",
+  "updatedAt": Any<String>,
+}
+`;

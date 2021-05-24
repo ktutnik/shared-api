@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Example API Should able to access basic plan with basic application 1`] = `
+Object {
+  "active": true,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Lorem Ipsum",
+  "type": "Basic",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`Example API Should able to access premium plan with premium application 1`] = `
+Object {
+  "message": "Premium",
+}
+`;

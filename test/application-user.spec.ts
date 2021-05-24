@@ -1,0 +1,65 @@
+import supertest from "supertest"
+import createApp from "../src/app"
+import { closeConnection, createApplication, createUser, ignoreProps } from "./helper"
+
+afterEach(async () => {
+    await closeConnection()
+})
+
+describe("Application User", () => {
+    it("Should able to share application to other user", async () => {
+        const plum = await createApp({ mode: "production" })
+        const { app, owner } = await createApplication(plum)
+        const juan = await createUser(plum, { email: "juan@gmail.com" })
+        const jean = await createUser(plum, { email: "jean@gmail.com" })
+        await supertest(plum.callback())
+            .post(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${owner.token}`)
+            .send({ user: juan.id })
+            .expect(200)
+        await supertest(plum.callback())
+            .post(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${owner.token}`)
+            .send({ user: jean.id })
+            .expect(200)
+        const { body } = await supertest(plum.callback())
+            .get(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${jean.token}`)
+            .expect(200)
+        expect(body[0]).toMatchSnapshot(ignoreProps)
+        expect(body[1]).toMatchSnapshot(ignoreProps)
+        expect(body[2]).toMatchSnapshot(ignoreProps)
+    })
+    it("AppUser should not able to add another user", async () => {
+        const plum = await createApp({ mode: "production" })
+        const { app, owner } = await createApplication(plum)
+        const juan = await createUser(plum, { email: "juan@gmail.com" })
+        const jean = await createUser(plum, { email: "jean@gmail.com" })
+        await supertest(plum.callback())
+            .post(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${owner.token}`)
+            .send({ user: juan.id })
+            .expect(200)
+        // juan tries to add jean
+        await supertest(plum.callback())
+            .post(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${juan.token}`)
+            .send({ user: jean.id })
+            .expect(401)
+    })
+    it("AppUser should not able to delete the application", async () => {
+        const plum = await createApp({ mode: "production" })
+        const { app, owner } = await createApplication(plum)
+        const juan = await createUser(plum, { email: "juan@gmail.com" })
+        await supertest(plum.callback())
+            .post(`/api/backend/applications/${app.id}/users`)
+            .set("Authorization", `Bearer ${owner.token}`)
+            .send({ user: juan.id })
+            .expect(200)
+        // juan tries to delete the application
+        await supertest(plum.callback())
+            .delete(`/api/backend/applications/${app.id}`)
+            .set("Authorization", `Bearer ${juan.token}`)
+            .expect(401)
+    })
+})

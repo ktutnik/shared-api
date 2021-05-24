@@ -1,15 +1,17 @@
 import { authorize, bind } from "@plumier/core";
-import {Context} from "koa"
+import { Context } from "koa"
 
 export class ExampleController {
 
+
+    // API to get application by provided api key
     @authorize.route("Basic", "Premium")
-    list(@bind.ctx() ctx:Context) {
-        return { sub: ctx.subscription }
+    app(@bind.ctx() ctx: Context) {
+        return ctx.state.application
     }
 
     @authorize.route("Premium")
     premium() {
-        return {}
+        return { message: "Premium" }
     }
 }

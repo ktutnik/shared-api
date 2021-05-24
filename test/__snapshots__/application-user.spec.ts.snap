@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Application User Should able to share application to other user 1`] = `
+Object {
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "John Doe",
+  "status": "Active",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`Application User Should able to share application to other user 2`] = `
+Object {
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "John Doe",
+  "status": "Active",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`Application User Should able to share application to other user 3`] = `
+Object {
+  "createdAt": Any<String>,
+  "deleted": false,
+  "email": "jean@gmail.com",
+  "id": Any<Number>,
+  "name": "John Doe",
+  "role": "User",
+  "status": "Active",
+  "updatedAt": Any<String>,
+}
+`;

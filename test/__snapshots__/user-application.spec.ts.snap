@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Application Should able to list all user application 1`] = `
+Object {
+  "active": true,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Lorem Ipsum",
+  "type": "Basic",
+  "updatedAt": Any<String>,
+}
+`;
+
+exports[`User Application Should able to list all user application 2`] = `
+Object {
+  "active": true,
+  "apiKey": Any<String>,
+  "createdAt": Any<String>,
+  "deleted": false,
+  "id": Any<Number>,
+  "name": "Ipsum Lorem",
+  "type": "Premium",
+  "updatedAt": Any<String>,
+}
+`;
