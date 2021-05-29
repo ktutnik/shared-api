@@ -55,6 +55,11 @@ export class AuthController {
     }
 
     @route.post()
+    admin() {
+        return response.json(this.createTokens({id:123, role: "Admin"} as User))
+    }
+
+    @route.post()
     async logout() {
         // clear cookie
         return response.json({}).setCookie("Authorization")
