@@ -54,6 +54,7 @@ export class AuthController {
         return this.createTokens(saved);
     }
 
+    @authorize.route("Public")
     @route.post()
     admin() {
         return response.json(this.createTokens({id:123, role: "Admin"} as User))
