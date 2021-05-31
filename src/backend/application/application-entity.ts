@@ -10,7 +10,7 @@ import { ApplicationUser } from "../application-user/application-user-entity"
 export type ApplicationType = "Basic" | "Premium"
 
 @genericController(c => {
-    c.getMany().authorize("Admin")
+    c.getMany().ignore()
     c.getOne().authorize("AppOwner", "AppUser")
     c.methods("Put", "Patch", "Delete").authorize("AppOwner")
 })

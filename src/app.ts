@@ -14,6 +14,10 @@ function createApp(config?: Partial<Configuration>) {
             rootPath: "/api/backend", group: "backend"
         }))
         .set(new ControllerFacility({
+            controller: "./admin/**/*-+(controller|entity).+(ts|js)",
+            rootPath: "/api/backend", group: "admin"
+        }))
+        .set(new ControllerFacility({
             controller: "./api/**/*-+(controller|entity).+(ts|js)",
             rootPath: "/api", group: "api"
         }))

@@ -9,17 +9,17 @@ export class ApplicationsController {
 
     // this process ideally done using some payment mechanism
     @route.post()
-    async activate(@val.required() pid: number, payment: number) {
+    async activate(@val.required() pid: number, @val.enums([5, 20]) payment: number) {
         const repo = getRepository(Application)
         // $5 only basic
         if (payment === 5) {
             await repo.update(pid, { active: true, type: "Basic" })
         }
         // $20 for premium
-        else if(payment === 20) {
+        else if (payment === 20) {
             await repo.update(pid, { active: true, type: "Premium" })
         }
-        else 
+        else
             throw new HttpStatusError(400, "Invalid payment")
     }
 

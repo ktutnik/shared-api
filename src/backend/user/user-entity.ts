@@ -5,15 +5,9 @@ import { Column, Entity } from "typeorm"
 import { EntityBase } from "../../_shared/entity-base"
 
 @genericController(c => {
-    // POST /users accessible by public
     c.post().authorize("Public")
-
-    // PUT PATCH DELETE GET /users/{id} only accessible by the user itself 
-    // See the user-policy.ts file how ResourceOwner defined
     c.methods("Delete", "GetOne", "Patch", "Put").authorize("ResourceOwner")
-
-    // GET /users?limit&offset&filter only accessible by Admin
-    c.getMany().authorize("Admin")
+    c.getMany().ignore()
 })
 @Entity()
 export class User extends EntityBase {
