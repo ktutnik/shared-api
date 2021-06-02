@@ -1,7 +1,7 @@
 import { authorize, bind, preSave } from "@plumier/core"
 import { val } from "@plumier/validator"
 import { genericController, JwtClaims } from "plumier"
-import { Column, Entity, getRepository, OneToMany } from "typeorm"
+import model, { collection } from "@plumier/mongoose"
 import keyGen from "uuid-apikey"
 
 import { EntityBase } from "../../_shared/entity-base"
@@ -14,34 +14,32 @@ export type ApplicationType = "Basic" | "Premium"
     c.getOne().authorize("AppOwner", "AppUser")
     c.methods("Put", "Patch", "Delete").authorize("AppOwner")
 })
-@Entity()
+@collection()
 export class Application extends EntityBase {
 
     @authorize.write("Admin")
     @val.enums(["Basic", "Premium"])
-    @Column({ default: "Basic" })
+    @collection.property({ default: "Basic" })
     type: ApplicationType
 
     @val.required()
-    @Column()
     name: string
 
-    @OneToMany(x => ApplicationUser, x => x.application)
+    @collection.ref(x => ApplicationUser, "application")
     users: ApplicationUser[]
 
     @authorize.readonly()
-    @Column()
     apiKey: string
 
     @authorize.write("Admin")
-    @Column({ default: false })
+    @collection.property({ default: false })
     active: boolean
 
     @preSave("post")
     async initEntity(@bind.user() user: JwtClaims) {
-        const repo = getRepository(ApplicationUser)
-        const appUser = await repo.save({ user: { id: user.userId }, role: "AppOwner" })
-        this.users = [{ id: appUser.id } as ApplicationUser]
+        const ApplicationUserModel = model(ApplicationUser)
+        const appUser = await new ApplicationUserModel({ user: user.userId, role: "AppOwner" }).save()
+        this.users = [appUser.id as ApplicationUser]
         this.apiKey = keyGen.create().apiKey
     }
 }

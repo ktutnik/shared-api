@@ -1,4 +1,4 @@
-import { GenericController } from "@plumier/typeorm";
+import { GenericController } from "@plumier/mongoose";
 import { Application } from "../../backend/application/application-entity";
 
 export class ApplicationController extends GenericController(Application, c => {

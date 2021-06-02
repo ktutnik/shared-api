@@ -1,12 +1,11 @@
 import { compare } from "bcryptjs"
 import { sign } from "jsonwebtoken"
 import { authorize, bind, HttpStatusError, JwtClaims, response, route } from "plumier"
-import { getManager } from "typeorm"
+import model, {  } from "@plumier/mongoose"
 
 import { User } from "../user/user-entity"
 
 export class AuthController {
-    readonly userRepo = getManager().getRepository(User)
 
     // --------------------------------------------------------------------- //
     // --------------------------- TOKEN HELPERS --------------------------- //
@@ -36,7 +35,8 @@ export class AuthController {
     @authorize.route("Public")
     @route.post()
     async login(email: string, password: string) {
-        const user = await this.userRepo.findOne({ email, status: "Active" })
+        const UserModel = model(User)
+        const user = await UserModel.findOne({ email, status: "Active" })
         if (!user || !await compare(password, user.password))
             throw new HttpStatusError(422, "Invalid username or password")
         const tokens = this.createTokens(user)
@@ -48,16 +48,17 @@ export class AuthController {
     @route.post()
     @authorize.route("RefreshToken")
     async refresh(@bind.user() user: JwtClaims) {
-        const saved = await this.userRepo.findOne(user.userId);
+        const UserModel = model(User)
+        const saved = await UserModel.findById(user.userId);
         if (!saved) throw new HttpStatusError(404, "User not found");
-        if(saved.status === "Suspended") throw new HttpStatusError(404, "User not found");
+        if (saved.status === "Suspended") throw new HttpStatusError(404, "User not found");
         return this.createTokens(saved);
     }
 
     @authorize.route("Public")
     @route.post()
     admin() {
-        return response.json(this.createTokens({id:123, role: "Admin"} as User))
+        return response.json(this.createTokens({id:"123", role: "Admin"} as User))
     }
 
     @route.post()

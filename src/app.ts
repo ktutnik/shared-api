@@ -1,6 +1,6 @@
 import { JwtAuthFacility } from "@plumier/jwt"
 import { SwaggerFacility } from "@plumier/swagger"
-import { TypeORMFacility } from "@plumier/typeorm"
+import { MongooseFacility } from "@plumier/mongoose"
 import Plumier, { Configuration, ControllerFacility, LoggerFacility, WebApiFacility } from "plumier"
 import { ApiKeyFacility } from "./_shared/api-key-facility"
 
@@ -21,7 +21,7 @@ function createApp(config?: Partial<Configuration>) {
             controller: "./api/**/*-+(controller|entity).+(ts|js)",
             rootPath: "/api", group: "api"
         }))
-        .set(new TypeORMFacility())
+        .set(new MongooseFacility())
         .set(new JwtAuthFacility({
             globalAuthorize: "AnyUser",
         }))

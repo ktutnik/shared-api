@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import { authorize, genericController, preSave, val } from "plumier"
-import { Column, Entity } from "typeorm"
+import { collection } from "@plumier/mongoose"
 
 import { EntityBase } from "../../_shared/entity-base"
 
@@ -9,24 +9,21 @@ import { EntityBase } from "../../_shared/entity-base"
     c.methods("Delete", "GetOne", "Patch", "Put").authorize("ResourceOwner")
     c.getMany().ignore()
 })
-@Entity()
+@collection()
 export class User extends EntityBase {
     // email will only visible by the user itself or by Admin
     @authorize.read("ResourceOwner", "Admin")
     @val.required()
     @val.unique()
     @val.email()
-    @Column()
     email: string
 
     // password will not visible to anyone
     @authorize.writeonly()
     @val.required()
-    @Column()
     password: string
 
     @val.required()
-    @Column()
     name:string
 
     @val.enums(["User", "Admin"])
@@ -34,12 +31,12 @@ export class User extends EntityBase {
     @authorize.write("Admin")
     // role only visible to the user itself or by Admin
     @authorize.read("ResourceOwner", "Admin")
-    @Column({ default: "User" })
+    @collection.property({ default: "User" })
     role: "User" | "Admin"
 
     @val.enums(["Active", "Suspended"])
     @authorize.write("Admin")
-    @Column({ default: "Active" })
+    @collection.property({ default: "Active" })
     status: "Active" | "Suspended"
 
     @preSave()

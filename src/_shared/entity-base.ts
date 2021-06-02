@@ -1,21 +1,19 @@
 import { authorize, entity } from "plumier"
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import {  collection } from "@plumier/mongoose"
 
 
-@Entity()
+@collection()
 export class EntityBase {
-    @PrimaryGeneratedColumn()
-    id: number
+    @collection.id()
+    id: string
 
     @authorize.readonly()
-    @CreateDateColumn()
     createdAt: Date
 
     @authorize.readonly()
-    @UpdateDateColumn()
     updatedAt: Date
 
     @entity.deleteColumn()
-    @Column({ default: false })
+    @collection.property({ default: false })
     deleted: boolean
 }

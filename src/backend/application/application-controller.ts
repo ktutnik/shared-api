@@ -1,5 +1,5 @@
 import { authorize, entityProvider, HttpStatusError, route, val } from "plumier";
-import { getRepository } from "typeorm";
+import model from "@plumier/mongoose";
 import keyGen from "uuid-apikey"
 import { Application } from "./application-entity";
 
@@ -9,15 +9,15 @@ export class ApplicationsController {
 
     // this process ideally done using some payment mechanism
     @route.post()
-    async activate(@val.required() pid: number, @val.enums([5, 20]) payment: number) {
-        const repo = getRepository(Application)
+    async activate(@val.required() pid: string, @val.enums([5, 20]) payment: number) {
+        const ApplicationModel = model(Application)
         // $5 only basic
         if (payment === 5) {
-            await repo.update(pid, { active: true, type: "Basic" })
+            await ApplicationModel.findByIdAndUpdate(pid, { active: true, type: "Basic" })
         }
         // $20 for premium
         else if (payment === 20) {
-            await repo.update(pid, { active: true, type: "Premium" })
+            await ApplicationModel.findByIdAndUpdate(pid, { active: true, type: "Premium" })
         }
         else
             throw new HttpStatusError(400, "Invalid payment")
@@ -28,8 +28,8 @@ export class ApplicationsController {
     @entityProvider(Application, "pid")
     async renew(@val.required() pid: number) {
         const apiKey = keyGen.create().apiKey
-        const repo = getRepository(Application)
-        await repo.update(pid, { apiKey })
+        const ApplicationModel = model(Application)
+        await ApplicationModel.findByIdAndUpdate(pid, { apiKey })
         return { apiKey }
     }
 }

@@ -1,5 +1,5 @@
 import { ActionResult, CustomMiddleware, DefaultFacility, HttpStatusError, Invocation, PlumierApplication } from "plumier"
-import { getRepository } from "typeorm"
+import model from "@plumier/mongoose"
 
 import { Application } from "../backend/application/application-entity"
 
@@ -21,10 +21,10 @@ class ApiKeyMiddleware implements CustomMiddleware {
         if (!key) return invocation.proceed()
         // if provided multiple api key just return HTTP 400 response
         if (Array.isArray(key)) throw new HttpStatusError(400, "Multiple API KEY is not supported")
-        const repo = getRepository(Application)
-        const app = await repo.findOne({ apiKey: key })
+        const ApplicationModel = model(Application)
+        const app = await ApplicationModel.findOne({ apiKey: key })
         // attach the application subscription type in ctx.subscription property
-        invocation.ctx.state.application = app
+        invocation.ctx.state.application = app as Application
         return invocation.proceed()
     }
 }

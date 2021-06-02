@@ -1,7 +1,7 @@
 import { meta } from "@plumier/core";
 import { genericController } from "@plumier/generic-controller";
 import { val } from "@plumier/validator";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { collection } from "@plumier/mongoose";
 import { EntityBase } from "../../_shared/entity-base";
 import { Application } from "../application/application-entity";
 import { User } from "../user/user-entity";
@@ -10,11 +10,11 @@ function transformer(x: any): User {
     return { ...x.user }
 }
 
-@Entity()
+@collection()
 export class ApplicationUser extends EntityBase {
 
     @val.required()
-    @ManyToOne(x => User)
+    @collection.ref(x => User)
     user: User
 
     @genericController(c => {
@@ -23,9 +23,9 @@ export class ApplicationUser extends EntityBase {
         c.accessors().authorize("AppOwner", "AppUser")
             .transformer(User, transformer)
     })
-    @ManyToOne(x => Application)
+    @collection.ref(x => Application)
     application: Application
 
-    @Column({ default: "AppUser" })
+    @collection.property({ default: "AppUser" })
     role: "AppOwner" | "AppUser"
 }

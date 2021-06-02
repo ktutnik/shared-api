@@ -3,13 +3,12 @@ import { sign } from "jsonwebtoken"
 import { join } from "path"
 import { JwtClaims } from "plumier"
 import supertest from "supertest"
-import { getConnection } from "typeorm"
 import { ApplicationType } from "../src/backend/application/application-entity"
 import { User } from "../src/backend/user/user-entity"
 
 dotenv.config({ path: join(__dirname, ".env-test") })
 
-export function createToken(id: number, role: "User" | "Admin") {
+export function createToken(id: string, role: "User" | "Admin") {
     return sign(<JwtClaims>{ userId: id, role }, process.env.PLUM_JWT_SECRET!)
 }
 
@@ -19,8 +18,8 @@ export const ignoreProps = {
     updatedAt: expect.any(String),
 }
 
-export const userToken = createToken(123, "User")
-export const adminToken = createToken(456, "Admin")
+export const userToken = createToken("123", "User")
+export const adminToken = createToken("456", "Admin")
 
 export async function createUser(app: any, user: Partial<User> = {}) {
     const { body } = await await supertest(app.callback())
@@ -57,7 +56,7 @@ export async function createApplication(app: any, type: ApplicationType = "Basic
 }
 
 export async function closeConnection() {
-    const con = getConnection()
-    if (con.isConnected)
-        await con.close()
+    // const con = getConnection()
+    // if (con.isConnected)
+    //     await con.close()
 }

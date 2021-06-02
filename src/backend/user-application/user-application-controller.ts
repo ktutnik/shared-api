@@ -1,5 +1,5 @@
 import { GenericControllerConfiguration } from "@plumier/generic-controller";
-import { GenericController } from "@plumier/typeorm";
+import { GenericController } from "@plumier/mongoose";
 import { ApplicationUser } from "../application-user/application-user-entity";
 import { Application } from "../application/application-entity";
 

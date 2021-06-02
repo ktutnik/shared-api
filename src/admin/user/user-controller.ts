@@ -1,4 +1,4 @@
-import { GenericController } from "@plumier/typeorm";
+import { GenericController } from "@plumier/mongoose";
 import { User } from "../../backend/user/user-entity";
 
 
